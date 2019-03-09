@@ -47,7 +47,13 @@ class UserMailController extends Controller
      */
     public function get ($uid, $mid = null) {
 	
-	$result = app('db')->select("SELECT * FROM mail where uid = $uid");
+	$sql = "SELECT * FROM mail where uid = $uid";
+    
+	if ($mid != null){
+	  $sql .= " AND mid = $mid";
+	}
+	
+	$result = app('db')->select($sql);
 	
 	return response()->json(['result' => $result]);
     }
