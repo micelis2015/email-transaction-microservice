@@ -1,8 +1,10 @@
-- github repo
-- TODO
-- Dockerfile
-- Laravel framework
-- Add REST endpoint for mail with generic mailer class
-- CLI- Add Mailjet integration 
+- ~~github repo~~
+- ~~TODO~~
+- ~~Dockerfile~~
+- ~~Laravel framework~~
+- ~~Add REST endpoints~~
+- Create generic mailer class
+- CLI
+- Add Mailjet integration 
 - Add Sendgrid integration
 - Test Vue.js app
