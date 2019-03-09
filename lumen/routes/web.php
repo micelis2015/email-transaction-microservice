@@ -11,6 +11,8 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->put('/user/{uid}/mail[/{mid}]', 'UserMailController@put');
+
+$router->get('/user/{id}/mail[/{mid}]', 'UserMailController@get');
+
+$router->delete('/user/{id}/mail[/{mid}]', 'UserMailController@delete');

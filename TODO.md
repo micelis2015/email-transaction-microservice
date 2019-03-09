@@ -2,5 +2,7 @@
 - TODO
 - Dockerfile
 - Laravel framework
-- Test Vue.js app 
-- Add REST endpoint for mail
+- Add REST endpoint for mail with generic mailer class
+- CLI- Add Mailjet integration 
+- Add Sendgrid integration
+- Test Vue.js app
