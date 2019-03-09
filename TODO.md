@@ -1,0 +1,6 @@
+- github repo
+- TODO
+- Dockerfile
+- Laravel framework
+- Test Vue.js app 
+- Add REST endpoint for mail
