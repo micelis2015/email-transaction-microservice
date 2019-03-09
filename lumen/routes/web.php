@@ -13,6 +13,6 @@
 
 $router->put('/user/{uid}/mail[/{mid}]', 'UserMailController@put');
 
-$router->get('/user/{id}/mail[/{mid}]', 'UserMailController@get');
+$router->get('/user/{uid}/mail[/{mid}]', 'UserMailController@get');
 
-$router->delete('/user/{id}/mail[/{mid}]', 'UserMailController@delete');
+$router->delete('/user/{uid}/mail[/{mid}]', 'UserMailController@delete');

@@ -47,7 +47,9 @@ class UserMailController extends Controller
      */
     public function get ($uid, $mid = null) {
 	
-	return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+	$result = app('db')->select("SELECT * FROM mail where uid = $uid");
+	
+	return response()->json(['result' => $result]);
     }
 
     //
