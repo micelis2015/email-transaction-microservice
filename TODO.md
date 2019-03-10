@@ -3,6 +3,7 @@
 - ~~Dockerfile~~
 - ~~Laravel framework~~
 - ~~Add REST endpoints~~
+- ~~Logging~~
 - Create generic mailer class
 - CLI
 - Add Mailjet integration 

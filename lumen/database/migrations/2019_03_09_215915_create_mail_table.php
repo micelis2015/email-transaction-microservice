@@ -33,11 +33,24 @@ class CreateMailTable extends Migration
 	    $table->unsignedBigInteger('mcid');
 	    $table->foreign('mtid')->references('mtid')->on('mailtype');
             $table->foreign('mcid')->references('mcid')->on('mailclient');
+	    $table->string('mail_to');
 	    $table->text('content');
 	    $table->boolean('send_confirmed');
 	    $table->integer('send_attempts');
 	    $table->timestamps();
         });
+	
+	Schema::create('jobs', function (Blueprint $table) {
+	    $table->bigIncrements('id');
+	    $table->string('queue');
+	    $table->longText('payload');
+	    $table->tinyInteger('attempts')->unsigned();
+	    $table->tinyInteger('reserved')->unsigned();
+	    $table->unsignedInteger('reserved_at')->nullable();
+	    $table->unsignedInteger('available_at');
+	    $table->unsignedInteger('created_at');
+	    $table->index(['queue', 'reserved', 'reserved_at']);
+	});
 	
     }
 
@@ -50,5 +63,7 @@ class CreateMailTable extends Migration
     {
         Schema::dropIfExists('mail');
 	Schema::dropIfExists('mailclient');
+	Schema::dropIfExists('mailtype');
+	Schema::dropIfExists('jobs');
     }
 }

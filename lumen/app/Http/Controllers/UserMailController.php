@@ -35,7 +35,15 @@ class UserMailController extends Controller
      */
     public function delete($uid, $mid = null) {
 	
-	return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+	if ($mid != null){
+	    $result = app('db')->table('mail')->where('uid', '=', $uid)->where('mid', '=', $mid)->delete();
+	}
+	else {
+	    $result = app('db')->table('mail')->where('uid', '=', $uid)->delete();
+	}
+	
+	return response()->json(['results' => $result]);
+	
     }
     
      /**
@@ -47,15 +55,24 @@ class UserMailController extends Controller
      */
     public function get ($uid, $mid = null) {
 	
-	$sql = "SELECT * FROM mail where uid = $uid";
-    
 	if ($mid != null){
-	  $sql .= " AND mid = $mid";
+	    $query = app('db')->table('mail')->where('uid', '=', $uid)->where('mid', '=', $mid);
+	}
+	else{
+	    $query = app('db')->table('mail')->where('uid', '=', $uid)->select();
 	}
 	
-	$result = app('db')->select($sql);
+	$query->join('mailclient', 'mail.mcid', '=', 'mailclient.mcid');
+	$query->join('mailtype', 'mail.mtid', '=', 'mailtype.mtid');
 	
-	return response()->json(['result' => $result]);
+	try {
+	    $results = $query->get();
+	}
+	catch (Illuminate\Database\QueryException $e){
+	    return response()->json(['error' => $e]);
+	}
+	
+	return response()->json(['results' => $results]);
     }
 
     //
