@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class MailTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,11 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-	    MailTypeSeeder::class,
-	    MailProviderSeeder::class,
-	    UserMailSeeder::class,
-	]);
-	
+        app('db')->table('mailtype')->insert([
+            'mtid' => 1,
+            'name' => 'html'
+        ]);
     }
 }

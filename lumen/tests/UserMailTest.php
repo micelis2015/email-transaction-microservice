@@ -14,7 +14,7 @@ class UserMailTest extends TestCase
     {
         $this->json('GET', '/user/1/mail')
              ->seeJson([
-                'mcid' => 2,
+                'mpid' => 2,
              ]);
     }
     
@@ -27,7 +27,7 @@ class UserMailTest extends TestCase
     {
         $this->json('GET', '/user/1/mail/2')
              ->seeJson([
-                'mcid' => 2,
+                'mpid' => 2,
              ]);
     }
     
@@ -40,7 +40,7 @@ class UserMailTest extends TestCase
     {
         $this->json('GET', '/user/1/mail')
              ->seeJson([
-                'mcid' => 2,
+                'mpid' => 2,
              ]);
     }
     
@@ -53,25 +53,12 @@ class UserMailTest extends TestCase
     {
         $this->json('GET', '/user/1/mail/1')
              ->seeJson([
-                'mcid' => 2,
+                'mpid' => 2,
              ]);
     }
     
     /**
-     * Test a POST for a user without specific mid
-     *
-     * @return void
-     */
-    public function testDeleteAllMail()
-    {
-        $this->json('DELETE', '/user/1/mail')
-             ->seeJson([
-                'mcid' => 2,
-             ]);
-    }
-    
-    /**
-     * Test a POST for a user without specific mid
+     * Test a DELETE for a specific UserMail
      *
      * @return void
      */
@@ -79,7 +66,33 @@ class UserMailTest extends TestCase
     {
         $this->json('DELETE', '/user/1/mail/1')
              ->seeJson([
-                'mcid' => 2,
+                'results' => 1,
+             ]);
+    }
+    
+    /**
+     * Test DELETE for all mail for a user
+     *
+     * @return void
+     */
+    public function testDeleteAllMail()
+    {
+        $this->json('DELETE', '/user/1/mail')
+             ->seeJson([
+                'results' => 1,
+             ]);
+    }
+    
+    /**
+     * Test a POST for a user without specific mid
+     *
+     * @return void
+     */
+    public function testDeleteSpecificInvalidMail()
+    {
+        $this->json('DELETE', '/user/1/mail/3')
+             ->seeJson([
+                'results' => 1,
              ]);
     }
 }

@@ -13,8 +13,8 @@ class CreateMailTable extends Migration
      */
     public function up()
     {
-        Schema::create('mailclient', function (Blueprint $table) {
-            $table->unsignedBigInteger('mcid', true);
+        Schema::create('mailprovider', function (Blueprint $table) {
+            $table->unsignedBigInteger('mpid', true);
 	    $table->string('name');
 	    $table->string('uri');
             $table->timestamps();
@@ -30,9 +30,9 @@ class CreateMailTable extends Migration
             $table->bigIncrements('mid');
 	    $table->string('uid');
 	    $table->unsignedBigInteger('mtid');
-	    $table->unsignedBigInteger('mcid');
+	    $table->unsignedBigInteger('mpid');
 	    $table->foreign('mtid')->references('mtid')->on('mailtype');
-            $table->foreign('mcid')->references('mcid')->on('mailclient');
+            $table->foreign('mpid')->references('mpid')->on('mailprovider');
 	    $table->string('mail_to');
 	    $table->text('content');
 	    $table->boolean('send_confirmed');

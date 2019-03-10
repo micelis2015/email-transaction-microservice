@@ -62,7 +62,7 @@ class UserMailController extends Controller
 	    $query = app('db')->table('mail')->where('uid', '=', $uid)->select();
 	}
 	
-	$query->join('mailclient', 'mail.mcid', '=', 'mailclient.mcid');
+	$query->join('mailprovider', 'mail.mpid', '=', 'mailprovider.mpid');
 	$query->join('mailtype', 'mail.mtid', '=', 'mailtype.mtid');
 	
 	try {
