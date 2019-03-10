@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use \App\Jobs\ProcessUserMail;
+
 class UserMailController extends Controller
 {
     /**
@@ -21,9 +24,37 @@ class UserMailController extends Controller
      * @param  int  $mid
      * @return Response
      */
-    public function put($uid, $mid = null) {
+    public function put(Request $request, $uid, $mid = null) {
 	
-	return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+	//Insert record in the DB, or retrieve existing to update
+	if ($mid != null){
+	   $existing =  app('db')->table('mail')->where('mid', '=', $mid)->get();
+	}
+	else{
+	    $existing = app('db')->table('mail')->where('mail_to', '=', $request['mail_to'])->where('content', '=', $request['content'])->get();
+	}
+	
+	if($existing){
+	    $result = $existing;
+	}
+	else{
+	    $result = app('db')->table('mail')->insertGetId([
+		'uid' => $uid,
+		'mtid' => $request->input('mtid'),
+		'mpid' => 1,
+		'mail_to' => $request->input('mail_to'),
+		'content' => $request->input('content'),
+		'send_confirmed' => 0,
+		'send_attempts' => 0
+	    ])->get();
+	}
+	
+	//queue mail for sending	
+	#$mail = new \stdClass();	
+	#$mail->mid = $result->input('mid');
+		
+	#ProcessUserMail::dispatch($mail);
+	return response()->json(['result' => $result, 'request' => $request->input()]);
     }
     
      /**
