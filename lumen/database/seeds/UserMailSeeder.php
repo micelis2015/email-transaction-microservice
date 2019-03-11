@@ -3,6 +3,7 @@
 use Illuminate\Support\Str;
 use Illuminate\Support\Integer;
 use Illuminate\Database\Seeder;
+use App\UserMail;
 
 class UserMailSeeder extends Seeder
 {
@@ -13,8 +14,8 @@ class UserMailSeeder extends Seeder
      */
     public function run()
     {
-        app('db')->table('mail')->insert([
-            'mid' => 1,
+        UserMail::create([
+            'id' => 1,
 	    'uid' => 1,
 	    'mtid' => 1,
 	    'mpid' => 1,
@@ -24,8 +25,8 @@ class UserMailSeeder extends Seeder
 	    'send_attempts' => rand(0,100)
         ]);
 	
-	app('db')->table('mail')->insert([
-            'mid' => 2,
+	UserMail::create([
+            'id' => 2,
 	    'uid' => 1,
 	    'mtid' => 1,
 	    'mpid' => 2,

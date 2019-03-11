@@ -38,7 +38,7 @@ class UserMailTest extends TestCase
      */
     public function testPutMail()
     {
-        $this->json('GET', '/user/1/mail')
+        $this->json('PUT', '/user/1/mail')
              ->seeJson([
                 'mpid' => 2,
              ]);
@@ -51,7 +51,7 @@ class UserMailTest extends TestCase
      */
     public function testPutMailWithMid()
     {
-        $this->json('GET', '/user/1/mail/1')
+        $this->json('PUT', '/user/1/mail/1')
              ->seeJson([
                 'mpid' => 2,
              ]);
@@ -92,7 +92,7 @@ class UserMailTest extends TestCase
     {
         $this->json('DELETE', '/user/1/mail/3')
              ->seeJson([
-                'results' => 1,
+                'results' => 0,
              ]);
     }
 }

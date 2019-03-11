@@ -12,7 +12,7 @@ class MailTypeSeeder extends Seeder
     public function run()
     {
         app('db')->table('mailtype')->insert([
-            'mtid' => 1,
+            'id' => 1,
             'name' => 'html'
         ]);
     }

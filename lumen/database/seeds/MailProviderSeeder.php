@@ -12,13 +12,13 @@ class MailProviderSeeder extends Seeder
     public function run()
     {
         app('db')->table('mailprovider')->insert([
-            'mpid' => 1,
+            'id' => 1,
 	    'name' => "SendGrid",
 	    'uri' => 'https://api.sendgrid.com'
         ]);
 	
 	app('db')->table('mailprovider')->insert([
-            'mpid' => 2,
+            'id' => 2,
 	    'name' => "MailJet",
 	    'uri' => 'https://api.mailjet.com'
         ]);
