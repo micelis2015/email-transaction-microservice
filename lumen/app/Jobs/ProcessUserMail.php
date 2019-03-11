@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\UserMail;
 use Illuminate\Queue\InteractsWithQueue;
+use \Mailjet\Resources;
 
 class ProcessUserMail extends Job
 {
@@ -37,19 +38,35 @@ class ProcessUserMail extends Job
 	\Log::info('Start job with mail:'. $this->mail);
 	//Send email to Sendgrid
 	
-	$provider = app('db')->table('mailprovider')->where('id', '=', $this->mail->mpid)->get();
+	return $this->SendMail();
 	
-	\Log::info("Send email using provider " . $provider->first()->name);
+    }
+    
+    function SendMail() {
+	$nomailproviders = app('db')->table('mailprovider')->count();
 	
-	$MailClass = $provider->first()->class;
+	$MailClass = $this->getMailClass();
 	
 	if ($this->$MailClass()){
 	    \Log::info("Email send, remove job");#
 	    $this->delete();
+	    exit();
+	}
+	else if ($this->mail->mpid++ < $nomailproviders) {
+	   $this->SendMail();
 	}
 	
-	$this->mail->mpid++;
+	return false;
 	
+    }
+    
+    function getMailClass(){
+	
+	$provider = app('db')->table('mailprovider')->where('id', '=', $this->mail->mpid)->get();
+	
+	\Log::info("Send email using provider " . $provider->first()->name);
+	
+	return $provider->first()->class;
     }
 
     function SendGridMail(){
@@ -74,13 +91,46 @@ class ProcessUserMail extends Job
 	} catch (Exception $e) {
 	    echo 'Caught exception: '. $e->getMessage() ."\n";
 	}
-	 return true;
+	
+	if ($response->statusCode() > 200) {
+	    \Log::info('Email not sent, error code:' . $response->statusCode());
+	    return false;
+	}
+	
+	return true;
 
     }
     
     function MailJetMail(){
-
 	
+	\Log::info("Sending MailJet email");
+	
+	$mailtype = app('db')->table('mailtype')->where('id', '=', $this->mail->mtid)->get();	
+
+	$mj = new \Mailjet\Client(env('MAILJET_API_KEY'), env('MAILJET_API_SECRET'),true,['version' => 'v3.1']);
+	$body = [
+	    'Messages' => [
+		[
+		    'From' => [
+			'Email' => env('EMAIL_FROM'),
+			'Name' => "DONOTREPLY"
+		    ],
+		    'To' => [
+			[
+			    'Email' => $this->mail->mail_to,
+			    'Name' => $this->mail->mail_to
+			]
+		    ],
+		    'Subject' => $this->mail->subject,
+		    'HTMLPart' => $this->mail->content
+		]
+	    ]
+	];
+	$response = $mj->post(Resources::$Email, ['body' => $body]);
+	
+	\Log::info(var_export($response, true));
+	
+	return $response->success() && var_dump($response->getData());
 
     }
 
