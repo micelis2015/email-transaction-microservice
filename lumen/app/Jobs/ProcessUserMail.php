@@ -59,8 +59,8 @@ class ProcessUserMail extends Job
 	\Log::info('Type of mail : ' . $mailtype);
 
 	$email = new \SendGrid\Mail\Mail(); 
-	$email->setFrom(env('EMAIL_FROM'), "Root User");
-	$email->setSubject("Email test");
+	$email->setFrom(env('EMAIL_FROM'), "DONOTREPLY");
+	$email->setSubject($this->mail->subject);
 	$email->addTo($this->mail->mail_to, $this->mail->mail_to);
 	$email->addContent(
 	    $mailtype->first()->type, $this->mail->content
