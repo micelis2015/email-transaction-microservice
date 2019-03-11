@@ -3,11 +3,14 @@
 namespace App\Jobs;
 
 use App\UserMail;
+use Illuminate\Queue\InteractsWithQueue;
 
 class ProcessUserMail extends Job
 {
+    use InteractsWithQueue;
     
     protected $mail;
+    public $tries = 3;
 
     /**
      * Create a new job instance.
@@ -18,6 +21,9 @@ class ProcessUserMail extends Job
     public function __construct(UserMail $mail)
     {
         $this->mail = $mail;
+	$this->tries = app('db')->table('mailprovider')->count();
+	
+	\Log::info('Max tries set to ' . $this->tries);
     }
     
     /**
@@ -30,33 +36,52 @@ class ProcessUserMail extends Job
         
 	\Log::info('Start job with mail:'. $this->mail);
 	//Send email to Sendgrid
-	SendMail($this->mail);
 	
-	$mail->mpid = $mail->mpid+1;
+	$provider = app('db')->table('mailprovider')->where('id', '=', $this->mail->mpid)->get();
 	
-	//if that fails, send mail to fallback option(s)
-	SendMail($this->mail);
+	\Log::info("Send email using provider " . $provider->first()->name);
+	
+	$MailClass = $provider->first()->class;
+	
+	if ($this->$MailClass()){
+	    \Log::info("Email send, remove job");#
+	    $this->delete();
+	}
+	
+	$this->mail->mpid++;
+	
     }
-}
 
-function SendMail(UserMail $mail){
-    
-    $email = new \SendGrid\Mail\Mail(); 
-    $email->setFrom("root", "Root User");
-    $email->setSubject("Email tes");
-    $email->addTo($mail->mail_to, $mail->mail_to);
-    $email->addContent(
-	"text/html", $mail->content
-    );
-    $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
-    try {
-	$response = $sendgrid->send($email);
-	print $response->statusCode() . "\n";
-	print_r($response->headers());
-	print $response->body() . "\n";
-    } catch (Exception $e) {
-	echo 'Caught exception: '. $e->getMessage() ."\n";
+    function SendGridMail(){
+	
+	$mailtype = app('db')->table('mailtype')->where('id', '=', $this->mail->mtid)->get();
+	
+	\Log::info('Type of mail : ' . $mailtype);
+
+	$email = new \SendGrid\Mail\Mail(); 
+	$email->setFrom(env('EMAIL_FROM'), "Root User");
+	$email->setSubject("Email test");
+	$email->addTo($this->mail->mail_to, $this->mail->mail_to);
+	$email->addContent(
+	    $mailtype->first()->type, $this->mail->content
+	);
+	$sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+	try {
+	    $response = $sendgrid->send($email);
+	    print $response->statusCode() . "\n";
+	    print_r($response->headers());
+	    print $response->body() . "\n";
+	} catch (Exception $e) {
+	    echo 'Caught exception: '. $e->getMessage() ."\n";
+	}
+	 return true;
+
     }
-     return true;
     
+    function MailJetMail(){
+
+	
+
+    }
+
 }

@@ -14,7 +14,7 @@ class UserMail extends Model
      * @var array
      */
     protected $fillable = [
-        'uid', 'content', 'mail_to', 'mpid', 'mtid', 'send_confirmed', 'send_attempts'
+        'uid', 'content', 'subject', 'mail_to', 'mpid', 'mtid', 'send_confirmed', 'send_attempts'
     ];
     
 }
