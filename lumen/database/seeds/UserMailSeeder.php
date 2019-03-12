@@ -22,7 +22,7 @@ class UserMailSeeder extends Seeder
 	    'mail_to' => Str::random(10).'@yahoo.com',
 	    'subject' => 'Test Email',
 	    'content' => 'This is content, can be <a>html</a>',
-	    'send_confirmed' => 0,
+	    'msid' => 1,
 	    'send_attempts' => rand(0,100)
         ]);
 	
@@ -34,7 +34,7 @@ class UserMailSeeder extends Seeder
 	    'subject' => 'Yet Another Email',
 	    'mail_to' => Str::random(10).'@yahoo.com',
 	    'content' => 'Another mail',
-	    'send_confirmed' => 1,
+	    'msid' => 1,
 	    'send_attempts' => rand(0,10)
         ]);
     }

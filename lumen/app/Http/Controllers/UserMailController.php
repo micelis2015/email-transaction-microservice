@@ -46,7 +46,7 @@ class UserMailController extends Controller
 		'mail_to' => $request->input('mail_to'),
 		'content' => $request->input('content'),
 		'subject' => $request->input('subject'),
-		'send_confirmed' => 0,
+		'msid' => 1,
 		'send_attempts' => 0
 	    ]);
 	    

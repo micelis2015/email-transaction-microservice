@@ -17,13 +17,17 @@ class CreateMailTable extends Migration
             $table->unsignedBigInteger('id', true);
 	    $table->string('name');
 	    $table->string('class');
-            $table->timestamps();
         });
+	
+	Schema::create('mailstatus', function (Blueprint $table) {
+            $table->unsignedBigInteger('id', true);
+	    $table->string('status');
+        });
+	
 	
 	Schema::create('mailtype', function (Blueprint $table) {
             $table->unsignedBigInteger('id', true);
 	    $table->string('type');
-            $table->timestamps();
         });
 	
 	Schema::create('mail', function (Blueprint $table) {
@@ -31,14 +35,15 @@ class CreateMailTable extends Migration
 	    $table->string('uid');
 	    $table->unsignedBigInteger('mtid');
 	    $table->unsignedBigInteger('mpid');
-	    $table->foreign('mtid')->references('id')->on('mailtype');
-            $table->foreign('mpid')->references('id')->on('mailprovider');
 	    $table->string('mail_to');
 	    $table->text('subject');
 	    $table->text('content');
-	    $table->boolean('send_confirmed');
+	    $table->unsignedBigInteger('msid');
 	    $table->integer('send_attempts');
 	    $table->timestamps();
+	    $table->foreign('mtid')->references('id')->on('mailtype');
+            $table->foreign('mpid')->references('id')->on('mailprovider');  
+	    $table->foreign('msid')->references('id')->on('mailstatus');  
         });
 	
 	Schema::create('jobs', function (Blueprint $table) {

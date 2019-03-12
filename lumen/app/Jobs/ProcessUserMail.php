@@ -38,7 +38,11 @@ class ProcessUserMail extends Job
 	\Log::info('Start job with mail:'. $this->mail);
 	//Send email to Sendgrid
 	
-	return $this->SendMail();
+	if (!$this->SendMail()) {
+	    $this->mail->msid = 99;
+	}
+	
+	$this->mail->save();
 	
     }
     
@@ -48,13 +52,20 @@ class ProcessUserMail extends Job
 	$MailClass = $this->getMailClass();
 	
 	if ($this->$MailClass()){
-	    \Log::info("Email send, remove job");#
+	    \Log::info("Email send, update record and remove job");#
+	    $this->mail->stid = 1;
+	    $this->mail->send_attempts++;
 	    $this->delete();
-	    exit();
+	    return true;
 	}
-	else if ($this->mail->mpid++ < $nomailproviders) {
+	else if ($this->mail->mpid < $nomailproviders) {
+	   \Log::info("Email not send, update provider and try again");
+	   $this->mail->mpid++;
+	   $this->mail->send_attempts++;
 	   $this->SendMail();
 	}
+	
+	\Log::info("Email not send, no providers left to try");
 	
 	return false;
 	
@@ -128,9 +139,9 @@ class ProcessUserMail extends Job
 	];
 	$response = $mj->post(Resources::$Email, ['body' => $body]);
 	
-	\Log::info(var_export($response, true));
+	\Log::info($response->getData());
 	
-	return $response->success() && var_dump($response->getData());
+	return $response->success();
 
     }
 
