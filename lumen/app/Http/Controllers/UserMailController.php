@@ -26,35 +26,42 @@ class UserMailController extends Controller
      * @return Response
      */
     public function put(Request $request, $uid, $mid = null) {
-		
-	//Insert record in the DB, or retrieve existing to update
-	if ($mid != null){
-	   $existing =  app('db')->table('mail')->where('id', '=', $mid)->get();
-	}
-	else{
-	    $existing = app('db')->table('mail')->where('uid', '=', $request->input('uid'))->where('mail_to', '=', $request->input('mail_to'))->where('content', '=', $request->input('content'))->get();
+	
+	//split emails into seperate records
+	if (empty($emails = explode(',', $request->input('mail_to')))){
+	    $emails = array($request->input('mail_to'));
 	}
 	
-	\Log::info("processing mail" . var_export($request, true));
-	
-	if($existing->count() > 0) {
-	   $result = $existing;
-	}
-	else{
-	    $result = UserMail::create([
-		'uid' => $request->input('uid'),
-		'mtid' => $request->input('mtid'),
-		'mpid' => 1,
-		'mail_to' => $request->input('mail_to'),
-		'content' => $request->input('content'),
-		'subject' => $request->input('subject'),
-		'msid' => 1,
-		'send_attempts' => 0
-	    ]);
-	    
-	    //queue mail for sending	
-	    dispatch(new ProcessUserMail($result));
-	    
+	foreach ($emails as $key => $mailto){	
+		//Insert record in the DB, or retrieve existing to update
+		if ($mid != null){
+		   $existing =  app('db')->table('mail')->where('id', '=', $mid)->get();
+		}
+		else{
+		    $existing = app('db')->table('mail')->where('uid', '=', $request->input('uid'))->where('mail_to', '=', trim($mailto))->where('content', '=', $request->input('content'))->get();
+		}
+
+		\Log::info("processing mail" . var_export($request, true));
+
+		if($existing->count() > 0) {
+		   $result[$key] = $existing;
+		}
+		else{
+		    $result[$key] = UserMail::create([
+			'uid' => $request->input('uid'),
+			'mtid' => $request->input('mtid'),
+			'mpid' => 1,
+			'mail_to' => trim($mailto),
+			'content' => $request->input('content'),
+			'subject' => $request->input('subject'),
+			'msid' => 1,
+			'send_attempts' => 0
+		    ]);
+
+		    //queue mail for sending	
+		    dispatch(new ProcessUserMail($result[$key]));
+
+		}
 	}
 
 	return response()->json(['result' => $result]);
@@ -101,7 +108,7 @@ class UserMailController extends Controller
 	$query->join('mailstatus', 'mail.msid', '=', 'mailstatus.id');
 	
 	try {
-	    $results = $query->get();
+	    $results = $query->addSelect('mail.id as mid')->get();
 	}
 	catch (Illuminate\Database\QueryException $e){
 	    return response()->json(['error' => $e]);
