@@ -53,7 +53,7 @@ class ProcessUserMail extends Job
 	
 	if ($this->$MailClass()){
 	    \Log::info("Email send, update record and remove job");#
-	    $this->mail->stid = 1;
+	    $this->mail->msid = 2;
 	    $this->mail->send_attempts++;
 	    $this->delete();
 	    return true;
@@ -103,7 +103,7 @@ class ProcessUserMail extends Job
 	    echo 'Caught exception: '. $e->getMessage() ."\n";
 	}
 	
-	if ($response->statusCode() > 200) {
+	if ($response->statusCode() != 202) {
 	    \Log::info('Email not sent, error code:' . $response->statusCode());
 	    return false;
 	}

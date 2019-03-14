@@ -38,3 +38,10 @@ db:
     MYSQL_DATABASE: lumen
     MYSQL_USER: lumen
     MYSQL_PASSWORD: tr5yrrt5y5634r
+    
+ui:
+  build: vue
+  volumes: 
+    - ./vue/app:/app
+  ports:
+    - "8081:8080"

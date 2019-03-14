@@ -35,6 +35,8 @@ class UserMailController extends Controller
 	    $existing = app('db')->table('mail')->where('uid', '=', $request->input('uid'))->where('mail_to', '=', $request->input('mail_to'))->where('content', '=', $request->input('content'))->get();
 	}
 	
+	\Log::info("processing mail" . var_export($request, true));
+	
 	if($existing->count() > 0) {
 	   $result = $existing;
 	}
@@ -55,7 +57,7 @@ class UserMailController extends Controller
 	    
 	}
 
-	return response()->json(['pre' => $existing->count(), 'result' => $result, 'request' => $request->input()]);
+	return response()->json(['result' => $result]);
     }
     
      /**
@@ -96,6 +98,7 @@ class UserMailController extends Controller
 	
 	$query->join('mailprovider', 'mail.mpid', '=', 'mailprovider.id');
 	$query->join('mailtype', 'mail.mtid', '=', 'mailtype.id');
+	$query->join('mailstatus', 'mail.msid', '=', 'mailstatus.id');
 	
 	try {
 	    $results = $query->get();

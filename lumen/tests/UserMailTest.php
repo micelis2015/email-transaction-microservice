@@ -2,6 +2,8 @@
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
+use Illuminate\Support\Str;
+use Illuminate\Support\HtmlString;
 
 class UserMailTest extends TestCase
 {
@@ -30,7 +32,7 @@ class UserMailTest extends TestCase
                 'mpid' => 2,
              ]);
     }
-    
+     
     /**
      * Test a POST for a user without specific mid
      *
@@ -38,22 +40,37 @@ class UserMailTest extends TestCase
      */
     public function testPutMail()
     {
-        $this->json('PUT', '/user/1/mail')
+	$data = array (
+	    'uid' => 1,
+	    'mtid ' =>  1,
+	    'mail_to ' =>  Str::random(10).'@yahoo.com',
+	    'content' => Str::random(500),
+	    'subject' =>  Str::random(50)
+	);
+	\Log::info("test data: $data");
+        $this->json('PUT', '/user/1/mail', $data, [])
              ->seeJson([
-                'mpid' => 2,
+                'mpid' => 1,
              ]);
     }
     
     /**
-     * Test a POST for a user without specific mid
+     * Test a POST for a user with specific mid
      *
      * @return void
      */
     public function testPutMailWithMid()
     {
-        $this->json('PUT', '/user/1/mail/1')
+        $data = array (
+	    'uid' => 1,
+	    'mtid ' =>  1,
+	    'mail_to ' =>  Str::random(10).'@yahoo.com',
+	    'content' => new HtmlString(Str::random(500)),
+	    'subject' =>  Str::random(50)
+	);
+        $this->json('PUT', '/user/1/mail/3', $data)
              ->seeJson([
-                'mpid' => 2,
+                'mpid' => 1,
              ]);
     }
     

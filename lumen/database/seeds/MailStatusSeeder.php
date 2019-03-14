@@ -13,12 +13,12 @@ class MailStatusSeeder extends Seeder
     {
         app('db')->table('mailstatus')->insert([
             'id' => 1,
-            'status' => 'Send'
+            'status' => 'Queued'
         ]);
 	
 	app('db')->table('mailstatus')->insert([
             'id' => 2,
-            'status' => 'Queued'
+            'status' => 'Send'
         ]);
 	
 	app('db')->table('mailstatus')->insert([

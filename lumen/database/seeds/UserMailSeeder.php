@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Integer;
 use Illuminate\Database\Seeder;
 use App\UserMail;
 
@@ -22,7 +21,7 @@ class UserMailSeeder extends Seeder
 	    'mail_to' => Str::random(10).'@yahoo.com',
 	    'subject' => 'Test Email',
 	    'content' => 'This is content, can be <a>html</a>',
-	    'msid' => 1,
+	    'msid' => 2,
 	    'send_attempts' => rand(0,100)
         ]);
 	
@@ -34,7 +33,7 @@ class UserMailSeeder extends Seeder
 	    'subject' => 'Yet Another Email',
 	    'mail_to' => Str::random(10).'@yahoo.com',
 	    'content' => 'Another mail',
-	    'msid' => 1,
+	    'msid' => 99,
 	    'send_attempts' => rand(0,10)
         ]);
     }
