@@ -27,6 +27,12 @@ class UserMailController extends Controller
      */
     public function put(Request $request, $uid, $mid = null) {
 	
+	//Don't bother if there isnt an email address.
+	if (empty($request->input('mail_to'))){
+	    \Log::info('No emails found');
+	    return response()->json(['error' => 'No email supplied']);
+	}
+
 	//split emails into seperate records
 	if (empty($emails = explode(',', $request->input('mail_to')))){
 	    $emails = array($request->input('mail_to'));

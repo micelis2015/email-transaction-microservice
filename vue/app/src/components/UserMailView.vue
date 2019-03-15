@@ -2,10 +2,10 @@
   <div id="container" class="container">
     <h2>UserMail Admin UI</h2>
     	<div id="send_mail" class="pb-3 container rounded border">
-	    <span class="alert alert-success fade show" role="alert" id="feedback" v-model="feedback">{{ feedback }}</span>
-	    <span class="alert alert-warning fade show" role="alert" id="error" v-model="error">{{ error }}</span>
+	    <span class="alert alert-success alert-dismissible fade show" role="alert" id="feedback" v-model="feedback">{{ feedback }}</span>
+	    <span class="alert alert-warning alert-dismissible fade show" role="alert" id="error" v-model="error">{{ error }}</span>
 	    <h2>Send email</h2>
-	    <form class="form" method="post" ref="mailform" @submit.prevent="postNow">
+	    <form class="form" method="post" ref="mailform" @submit.prevent="putNow">
 	    <div class="form-group">
 		<div class="row">
 		  <div class="col">
@@ -113,8 +113,8 @@ export default {
 		    this.error('Oops, something went wrong with the GET API call to get the mails');
 		});
 	},
-	postNow() {
-	    
+	putNow() {
+	    this.feedback = this.error = '';
 	    axios.put('http://local.site:8008/user/1/mail/', 
 	      {uid:this.uid,
 	       mtid:this.mtid,
@@ -123,9 +123,15 @@ export default {
 	       subject:this.subject
 	       }
 	      ).then((response) => {
-		    this.getData();
-		    this.feedback = "New email queued for sending";
-		    this.resetForm()
+		    if (response.data.result){
+			this.getData();
+			this.feedback = "New email queued for sending";
+			this.resetForm()
+		    }
+		    else if (response.data.error){
+			this.error = response.data.error;
+		    }
+		    
 		}, function() {
 		    console.log(response);
 		    this.error('Oops, something went wrong with the PUT API call to create your emails');
@@ -142,7 +148,12 @@ export default {
 	    this.subject =  '';
 	},
 	fireDelete(mid) {
-	    axios.delete('http://local.site:8008/user/1/mail/'+mid).then(this.getData());
+	    axios.delete('http://local.site:8008/user/1/mail/'+mid)
+	    .then((response) => {
+		this.getData();
+		this.feedback = "New email queued for sending";
+		this.resetForm();
+	    });
 	}
 	
     }
