@@ -148,10 +148,11 @@ export default {
 	    this.subject =  '';
 	},
 	fireDelete(mid) {
+	    this.feedback = this.error = '';
 	    axios.delete('http://local.site:8008/user/1/mail/'+mid)
 	    .then((response) => {
 		this.getData();
-		this.feedback = "New email queued for sending";
+		this.feedback = "Email deleted from system";
 		this.resetForm();
 	    });
 	}
