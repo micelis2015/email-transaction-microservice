@@ -97,7 +97,7 @@ class UserMailController extends Controller
     public function get ($uid, $mid = null) {
 	
 	if ($mid != null){
-	    $query = app('db')->table('mail')->where('uid', '=', $uid)->where('mail.id', '=', $mid);
+	    $query = app('db')->table('mail')->where('uid', '=', $uid)->where('mail.id', '=', $mid)->select();
 	}
 	else{
 	    $query = app('db')->table('mail')->where('uid', '=', $uid)->select();

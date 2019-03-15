@@ -11,8 +11,10 @@
 |
 */
 
-$router->put('/user/{uid}/mail[/{mid}]', 'UserMailController@put');
+Route::group(['middleware' => 'App\Http\Middleware\CorsMiddleware'], (function () {
+    Route::put('/user/{uid}/mail[/{mid}]', 'UserMailController@put');
 
-$router->get('/user/{uid}/mail[/{mid}]', 'UserMailController@get');
+    Route::get('/user/{uid}/mail[/{mid}]', 'UserMailController@get');
 
-$router->delete('/user/{uid}/mail[/{mid}]', 'UserMailController@delete');
+    Route::delete('/user/{uid}/mail[/{mid}]', 'UserMailController@delete');
+}));
