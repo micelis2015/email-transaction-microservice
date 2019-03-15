@@ -4,8 +4,8 @@
 - ~~Laravel framework~~
 - ~~Add REST endpoints~~
 - ~~Logging~~
-- Create generic mailer class
-- CLI
-- Add Mailjet integration 
-- Add Sendgrid integration
-- Test Vue.js app
+- ~~Create generic mailer class~~
+- ~~Add Mailjet integration~~
+- ~~Add Sendgrid integration~~
+- ~~Test Vue.js app with Bootstrap~~
+- Error log for each attempt

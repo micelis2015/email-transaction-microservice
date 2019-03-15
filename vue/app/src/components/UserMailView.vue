@@ -97,17 +97,19 @@ export default {
 	mail_to:'',
 	content:'',
 	subject:'',
-	error:''
+	error:'',
+	timer: ''
       }
     },
     mounted: function () {
 	this.getData()
+	this.timer = setInterval(this.getData(), 1000)
     },
     methods: {
 	getData() {
-
-	    axios.get('http://local.site:8008/user/1/mail/').then((response) => {
-		    console.log(response.data);
+	    console.log('getData() called');
+	    axios.get('http://' + location.hostname + ':8008/user/1/mail/').then((response) => {
+		    
 		    this.mails = response.data.results;
 		}, function() {
 		    this.error('Oops, something went wrong with the GET API call to get the mails');
@@ -115,7 +117,7 @@ export default {
 	},
 	putNow() {
 	    this.feedback = this.error = '';
-	    axios.put('http://local.site:8008/user/1/mail/', 
+	    axios.put('http://' + location.hostname + ':8008/user/1/mail/', 
 	      {uid:this.uid,
 	       mtid:this.mtid,
 	       mail_to:this.mail_to,
@@ -149,7 +151,7 @@ export default {
 	},
 	fireDelete(mid) {
 	    this.feedback = this.error = '';
-	    axios.delete('http://local.site:8008/user/1/mail/'+mid)
+	    axios.delete('http://' + location.hostname + ':8008/user/1/mail/'+mid)
 	    .then((response) => {
 		this.getData();
 		this.feedback = "Email deleted from system";
@@ -157,6 +159,9 @@ export default {
 	    });
 	}
 	
+    },
+    beforeDestroy() {
+	clearInterval(this.timer)
     }
 }
 </script>

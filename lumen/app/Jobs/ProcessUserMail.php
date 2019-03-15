@@ -64,8 +64,9 @@ class ProcessUserMail extends Job
 	   $this->mail->send_attempts++;
 	   $this->SendMail();
 	}
-	
+
 	\Log::info("Email not send, no providers left to try");
+	$this->mail->msid = 99;
 	
 	return false;
 	
@@ -107,6 +108,8 @@ class ProcessUserMail extends Job
 	    \Log::info('Email not sent, error code:' . $response->statusCode());
 	    return false;
 	}
+	
+	\Log::info("Email send through SendGrid");
 	
 	return true;
 
