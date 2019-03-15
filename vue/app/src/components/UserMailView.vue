@@ -1,7 +1,9 @@
 <template>
   <div id="container" class="container">
     <h2>UserMail Admin UI</h2>
-	<div id="send_mail" class="pb-3 container rounded border">
+    	<div id="send_mail" class="pb-3 container rounded border">
+	    <span class="alert alert-success fade show" role="alert" id="feedback" v-model="feedback">{{ feedback }}</span>
+	    <span class="alert alert-warning fade show" role="alert" id="error" v-model="error">{{ error }}</span>
 	    <h2>Send email</h2>
 	    <form class="form" method="post" ref="mailform" @submit.prevent="postNow">
 	    <div class="form-group">
@@ -38,10 +40,12 @@
 	<div id="mail_status" class="mt-5 container rounded p-3 border">
 	    <h2>Email status</h2>
 	    <table v-if="mails && mails.length" class="table table-striped">
-		<thead class="thead-dark"><tr>
+		<thead class="thead-dark">
+		    <tr>
 		    <th v-for="item of headers">
 		      {{ item.text }}
 		    </th>
+		    <th></th>
 		    </tr>
 		</thead>
 		<tbody>
@@ -56,6 +60,10 @@
 		    <td>{{ item.content }}</td>
 		    <td>{{ item.created_at }}</td>
 		    <td>{{ item.updated_at }}</td>
+		    <td><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			</button>
+		    </td>
 		</tr>
 		</tbody>
 	      </table>
@@ -83,45 +91,62 @@ export default {
 	    { text: 'updated', value: '' }
 	    ],
 	mails: [],
-	feedback: [],
+	feedback: '',
 	uid: 1,
 	mtid:1,
 	mail_to:'',
 	content:'',
-	subject:''
+	subject:'',
+	error:''
       }
     },
     created: function () {
-	axios.get('http://local.site:8008/user/1/mail/').then((response) => {
+	this.getData()
+    },
+    methods: {
+	getData() {
+
+	    axios.get('http://local.site:8008/user/1/mail/').then((response) => {
 		    console.log(response.data);
 		    this.mails = response.data.results;
 		}, function() {
-		    alert('oops, something went wrong with the GET API call to get the mails');
+		    this.error('Oops, something went wrong with the GET API call to get the mails');
 		});
-    },
-    methods: {
+	},
 	postNow() {
 	    
 	    axios.put('http://local.site:8008/user/1/mail/', 
 	      {uid:this.uid,
 	       mtid:this.mtid,
-	       mail_to:this.mailto,
+	       mail_to:this.mail_to,
 	       content:this.content,
 	       subject:this.subject
 	       }
 	      ).then((response) => {
-		    console.log('bye');
-		    console.log(response.data);
-		    console.log(response.result);
-		    this.feedback = response.data.results;
+		    this.getData();
+		    this.feedback = "New email queued for sending";
+		    this.resetForm()
 		}, function() {
-		    console.log('there');
 		    console.log(response);
-		    alert('oops, something went wrong with the GET API call to get the mails');
+		    this.error('Oops, something went wrong with the PUT API call to create your emails');
 		}).catch(function (error) {
                     console.log(error);
                 });
-	 }
+	},
+	resetForm() {
+	    console.log('Reset form');
+	    this.uid = 1;
+	    this.mtid = 1;
+	    this.mail_to = '';
+	    this.content ='';
+	    this.subject = '';
+	}
     }
 }
 </script>
+
+<style>
+    .alert:empty{
+	display:none;
+    }
+</style>
