@@ -60,7 +60,7 @@
 		    <td>{{ item.content }}</td>
 		    <td>{{ item.created_at }}</td>
 		    <td>{{ item.updated_at }}</td>
-		    <td><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <td><button type="button" class="close" data-dismiss="alert" aria-label="Close" @click="fireDelete(item.mid)">
 			    <span aria-hidden="true">&times;</span>
 			</button>
 		    </td>
@@ -100,7 +100,7 @@ export default {
 	error:''
       }
     },
-    created: function () {
+    mounted: function () {
 	this.getData()
     },
     methods: {
@@ -139,8 +139,12 @@ export default {
 	    this.mtid = 1;
 	    this.mail_to = '';
 	    this.content ='';
-	    this.subject = '';
+	    this.subject =  '';
+	},
+	fireDelete(mid) {
+	    axios.delete('http://local.site:8008/user/1/mail/'+mid).then(this.getData());
 	}
+	
     }
 }
 </script>
