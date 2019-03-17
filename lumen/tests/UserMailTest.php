@@ -55,6 +55,69 @@ class UserMailTest extends TestCase
     }
     
     /**
+     * Test a POST for a user without specific mid and missing email
+     *
+     * @return void
+     */
+    public function testFAILPutMailWithNoEmail()
+    {
+	$data = array (
+	    'uid' => 1,
+	    'mtid' =>  1,
+	    'mail_to' =>  '',
+	    'content' => Str::random(100),
+	    'subject' =>  Str::random(50)
+	);
+	\Log::info("test data: " . json_encode($data));
+        $this->json('PUT', '/user/1/mail', $data, [])
+             ->seeJson([
+                'error' => "No email supplied",
+             ]);
+    }
+    
+    /**
+     * Test a POST for a user without specific mid and 2 email addresses
+     *
+     * @return void
+     */
+    public function testPutMailMultipleEmails()
+    {
+	$data = array (
+	    'uid' => 1,
+	    'mtid' =>  1,
+	    'mail_to' =>  Str::random(10).'@yahoo.com' . ', ' . Str::random(10).'@yahoo.com',
+	    'content' => Str::random(100),
+	    'subject' =>  Str::random(50)
+	);
+	\Log::info("test data: " . json_encode($data));
+        $this->json('PUT', '/user/1/mail', $data, [])
+             ->seeJson([
+                'mpid' => 1,
+             ]);
+    }
+    
+    /**
+     * Test a POST for a user without specific mid with email-type text instead of html
+     *
+     * @return void
+     */
+    public function testPutMailAsText()
+    {
+	$data = array (
+	    'uid' => 1,
+	    'mtid' =>  2,
+	    'mail_to' =>  Str::random(10).'@yahoo.com',
+	    'content' => Str::random(100),
+	    'subject' =>  Str::random(50)
+	);
+	\Log::info("test data: " . json_encode($data));
+        $this->json('PUT', '/user/1/mail', $data, [])
+             ->seeJson([
+                'mpid' => 1,
+             ]);
+    }
+    
+    /**
      * Test a POST for a user with specific mid
      *
      * @return void
@@ -72,7 +135,7 @@ class UserMailTest extends TestCase
 	\Log::info("test data: " . json_encode($data));
         $this->json('PUT', '/user/1/mail/3', $data, [])
              ->seeJson([
-                'mpid' => 1,
+                'uid' => "1",
              ]);
     }
     
@@ -98,7 +161,7 @@ class UserMailTest extends TestCase
     {
         $this->json('DELETE', '/user/1/mail')
              ->seeJson([
-                'results' => 2,
+                'results' => 5,
              ]);
     }
     

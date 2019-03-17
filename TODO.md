@@ -8,4 +8,8 @@
 - ~~Add Mailjet integration~~
 - ~~Add Sendgrid integration~~
 - ~~Test Vue.js app with Bootstrap~~
+- Logic for updating email when not yet send/bounced
 - Error log for each attempt
+- Add user integration
+- Add more test cases for
+   - first sender failing

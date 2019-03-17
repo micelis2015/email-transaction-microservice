@@ -135,11 +135,29 @@ class ProcessUserMail extends Job
 			    'Name' => $this->mail->mail_to
 			]
 		    ],
-		    'Subject' => $this->mail->subject,
-		    'HTMLPart' => $this->mail->content
+		    'Subject' => $this->mail->subject
 		]
 	    ]
 	];
+	
+	switch ($this->mail->mtid){
+	    case 1 : //html
+		    $body['Messages'][0]['HTMLPart'] = $this->mail->content;
+		break;
+	    case 2 : //plain text
+		    $body['Messages'][0]['TextPart'] = $this->mail->content;
+		break;
+	    case 3 : //MarkDown
+		    $body['Messages'][0]['TextPart'] = $this->mail->content;
+		break;
+	    default :
+		//shouldnt be there;
+		\Log::error('Could not find a valid mail type');
+		
+	}
+	
+	\Log::info(json_encode($body));
+	
 	$response = $mj->post(Resources::$Email, ['body' => $body]);
 	
 	\Log::info($response->getData());

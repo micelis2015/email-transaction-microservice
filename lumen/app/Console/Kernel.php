@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\UserMailPut::class,
+	Commands\UserMailGet::class,
+	Commands\UserMailDelete::class
     ];
 
     /**
