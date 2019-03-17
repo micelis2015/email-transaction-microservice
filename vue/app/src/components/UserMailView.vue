@@ -109,7 +109,6 @@ export default {
 	getData() {
 	    console.log('getData() called');
 	    axios.get('http://' + location.hostname + ':8008/user/1/mail/').then((response) => {
-		    
 		    this.mails = response.data.results;
 		}, function() {
 		    this.error('Oops, something went wrong with the GET API call to get the mails');
@@ -125,13 +124,13 @@ export default {
 	       subject:this.subject
 	       }
 	      ).then((response) => {
-		    if (response.data.result){
+		    if (response.data.results && !response.data.results.error){
 			this.getData();
 			this.feedback = "New email queued for sending";
 			this.resetForm()
 		    }
-		    else if (response.data.error){
-			this.error = response.data.error;
+		    else if (response.data.results.error){
+			this.error = response.data.results.error;
 		    }
 		    
 		}, function() {
