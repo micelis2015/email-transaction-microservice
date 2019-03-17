@@ -42,12 +42,12 @@ class UserMailTest extends TestCase
     {
 	$data = array (
 	    'uid' => 1,
-	    'mtid ' =>  1,
-	    'mail_to ' =>  Str::random(10).'@yahoo.com',
-	    'content' => Str::random(500),
+	    'mtid' =>  1,
+	    'mail_to' =>  Str::random(10).'@yahoo.com',
+	    'content' => Str::random(100),
 	    'subject' =>  Str::random(50)
 	);
-	\Log::info("test data: $data");
+	\Log::info("test data: " . json_encode($data));
         $this->json('PUT', '/user/1/mail', $data, [])
              ->seeJson([
                 'mpid' => 1,
@@ -62,13 +62,15 @@ class UserMailTest extends TestCase
     public function testPutMailWithMid()
     {
         $data = array (
+	    'mid' => 1,
 	    'uid' => 1,
-	    'mtid ' =>  1,
-	    'mail_to ' =>  Str::random(10).'@yahoo.com',
-	    'content' => new HtmlString(Str::random(500)),
+	    'mtid' =>  1,
+	    'mail_to' =>  Str::random(10).'@yahoo.com',
+	    'content' => Str::random(100),
 	    'subject' =>  Str::random(50)
 	);
-        $this->json('PUT', '/user/1/mail/3', $data)
+	\Log::info("test data: " . json_encode($data));
+        $this->json('PUT', '/user/1/mail/3', $data, [])
              ->seeJson([
                 'mpid' => 1,
              ]);
@@ -96,7 +98,7 @@ class UserMailTest extends TestCase
     {
         $this->json('DELETE', '/user/1/mail')
              ->seeJson([
-                'results' => 1,
+                'results' => 2,
              ]);
     }
     
