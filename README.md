@@ -1,4 +1,5 @@
 
+
 # email-transaction-microservice
 
 - Although I thought redis might be a good option with regards to storing mail state, mysql prebuild docker setup are ready to go hence quicker
@@ -12,11 +13,16 @@ On a docker enabled host, run from inside the root dir of the repo
 
     docker-compose up
 
+This will build several docker images and start them all.
+
+There's a php-fpm container, a nginx front-end container and a mysql container, as well as a vue.js container for the UI
+The php-fpm container mounts in the *lumen/* directory to run the lumen application
+the vue.js container mounts in the *vue/* directory to run the vue.js application
+
 You'll need to create a .env file first based on the .env.example file with environment details
 
 Then, inside the lumen directory of the project run
   
-
     php artisan migrate:fresh && php artisan db:seed && php artisan queue::work
 
 This will set up the database tables and add some sample data, and start the queue worker

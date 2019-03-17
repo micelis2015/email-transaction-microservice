@@ -8,6 +8,7 @@
 - ~~Add Mailjet integration~~
 - ~~Add Sendgrid integration~~
 - ~~Test Vue.js app with Bootstrap~~
+- Convert sendmail/mailjet methods into actual API wrapper classes to interrogate the services
 - Logic for updating email when not yet send/bounced
 - Error log for each attempt
 - Add user integration

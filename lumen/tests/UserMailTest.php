@@ -92,7 +92,7 @@ class UserMailTest extends TestCase
 	\Log::info("test data: " . json_encode($data));
         $this->json('PUT', '/user/1/mail', $data, [])
              ->seeJson([
-                'mpid' => 1,
+                'uid' => 1,
              ]);
     }
     
@@ -113,7 +113,7 @@ class UserMailTest extends TestCase
 	\Log::info("test data: " . json_encode($data));
         $this->json('PUT', '/user/1/mail', $data, [])
              ->seeJson([
-                'mpid' => 1,
+                'uid' => 1,
              ]);
     }
     
