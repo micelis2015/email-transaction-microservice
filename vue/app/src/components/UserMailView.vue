@@ -4,7 +4,7 @@
     	<div id="send_mail" class="pb-3 container rounded border">
 	    <span class="alert alert-success alert-dismissible fade show" role="alert" id="feedback" v-model="feedback">{{ feedback }}</span>
 	    <span class="alert alert-warning alert-dismissible fade show" role="alert" id="error" v-model="error">{{ error }}</span>
-	    <h2>Send email</h2>
+	    <h3>Send email</h3>
 	    <form class="form" method="post" ref="mailform" @submit.prevent="putNow">
 	    <div class="form-group">
 		<div class="row">
@@ -37,8 +37,8 @@
 	     <button type="submit" class="btn btn-primary">Send</button>
 	     </form>
 	</div>
-	<div id="mail_status" class="mt-5 container rounded p-3 border">
-	    <h2>Email status</h2>
+	<div id="mail_status" class="mt-5 container">
+	    <h3>Email status</h3>
 	    <table v-if="mails && mails.length" class="table table-striped">
 		<thead class="thead-dark">
 		    <tr>
