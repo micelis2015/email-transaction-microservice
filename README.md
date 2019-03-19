@@ -23,7 +23,7 @@ You'll need to create a .env file first based on the .env.example file with envi
 
 Then, inside the lumen directory of the project run
   
-    php artisan migrate:fresh && php artisan db:seed && php artisan queue::work
+    php artisan migrate:fresh && php artisan db:seed && php artisan queue:work
 
 This will set up the database tables and add some sample data, and start the queue worker
 
