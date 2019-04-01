@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * PHP version >= 7.0
  *
  * @category Console_Command
@@ -29,8 +28,8 @@ class UserMailDelete extends Command
      * @var string
      */
     protected $signature = "usermail:delete "
-	    . "{uid : User ID} "
-	    . "{mid? : [optional] mail id of existing mail}";
+        . "{uid : User ID} "
+        . "{mid? : [optional] mail id of existing mail}";
     
     /**
      * The console command description.
@@ -49,11 +48,11 @@ class UserMailDelete extends Command
     {
         try {
             if (!$this->argument('mid')) {
-		$this->info(json_encode(UserMail::deleteUserMail($this->argument('uid'))));
-	    }
-	    else {
-		$this->info(json_encode(UserMail::deleteUserMail($this->argument('uid'), $this->argument('mid'))));
-	    } 
+                $this->info(json_encode(UserMail::deleteUserMail($this->argument('uid'))));
+            }
+            else {
+                $this->info(json_encode(UserMail::deleteUserMail($this->argument('uid'), $this->argument('mid'))));
+            } 
         } catch (Exception $e) {
             $this->error("An error occurred");
         }

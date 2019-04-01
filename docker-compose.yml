@@ -37,8 +37,7 @@ db:
     MYSQL_ROOT_PASSWORD: 4rt6yrty7u65yH
     MYSQL_DATABASE: lumen
     MYSQL_USER: lumen
-    MYSQL_PASSWORD: tr5yrrt5y5634r
-    
+    MYSQL_PASSWORD: tr5yrrt5y5634r    
 ui:
   build: vue
   volumes: 

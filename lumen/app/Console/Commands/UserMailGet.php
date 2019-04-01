@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * PHP version >= 7.0
  *
  * @category Console_Command
@@ -30,8 +29,8 @@ class UserMailGet extends Command
      * @var string
      */
     protected $signature = "usermail:get "
-	    . "{uid : User ID} "
-	    . "{mid? : [optional] mail id of existing mail}";
+        . "{uid : User ID} "
+        . "{mid? : [optional] mail id of existing mail}";
 
     /**
      * The console command description.
@@ -49,12 +48,12 @@ class UserMailGet extends Command
     public function handle()
     {
         try {
-	    if (!$this->arguments('mid')) {
-		$this->info(json_encode(UserMail::getUserMail($this->argument('uid'))));
-	    }
-	    else {
-		$this->info(json_encode(UserMail::getUserMail($this->argument('uid'), $this->argument('mid'))));
-	    }    
+            if (!$this->arguments('mid')) {
+                $this->info(json_encode(UserMail::getUserMail($this->argument('uid'))));
+            }
+            else {
+                $this->info(json_encode(UserMail::getUserMail($this->argument('uid'), $this->argument('mid'))));
+            }    
         } catch (Exception $e) {
             $this->error("An error occurred");
         }
